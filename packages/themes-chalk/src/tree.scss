@@ -26,4 +26,16 @@
       cursor: default;
     }
   }
+
+  @include when('selected') {
+    background: #f00;
+  }
+  @include e('content') {
+    display: flex;
+  }
+  @include e('label') {
+    cursor: pointer;
+    display: flex;
+    flex: 1;
+  }
 }

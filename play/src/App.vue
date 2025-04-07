@@ -13,11 +13,15 @@
             key-field="key"
             children-field="children"
             :default-expanded-keys="[]"
-            :on-load='handleLoad'></f-tree>
+            :on-load='handleLoad'
+            v-model:selectedKeys="value"
+            selectable
+            multiple></f-tree>
+    <!-- selectable 表示可以选择节点， multiple表示可以选择多个节点 -->
   </div>
 </template>
 <script setup lang="ts">
-import type { TreeOption } from '@fc/components/tree/src/tree'
+import type { Key, TreeOption } from '@fc/components/tree/src/tree'
 import { AddCircle } from '@vicons/ionicons5'
 import { ref } from 'vue'
 
@@ -83,6 +87,8 @@ const handleLoad = (node: TreeOption) => {
     }, 1000)
   })
 }
+
+const value = ref<Key[]>(['40'])
 </script>
 
 <style scoped></style>

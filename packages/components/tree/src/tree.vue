@@ -5,13 +5,15 @@
                  :node="node"
                  :expanded="isExpanded(node)"
                  :loadingKeysRef="loadingKeysRef"
-                 @toggle="toggleExpand"></f-tree-node>
+                 @toggle="toggleExpand"
+                 :selectedKeys='selectKeysRef'
+                 @select="handleSelect"></f-tree-node>
   </div>
 </template>
 <script setup lang="ts">
 import { createNamespace } from '@fc/utils/create'
 import { computed, ref, watch } from 'vue'
-import { Key, TreeNode, TreeOption, treeProps } from './tree'
+import { Key, treeEmits, TreeNode, TreeOption, treeProps } from './tree'
 import FTreeNode from './treeNode.vue'
 
 defineOptions({
@@ -154,5 +156,40 @@ function triggerLoading(node: TreeNode) {
       }
     }
   }
+}
+
+//实现选中节点
+const emit = defineEmits(treeEmits)
+const selectKeysRef = ref<Key[]>([])
+watch(
+  () => props.selectedKeys,
+  (value) => {
+    if (value) {
+      selectKeysRef.value = value
+    }
+  },
+  { immediate: true }
+)
+
+//处理选中的节点
+function handleSelect(node: TreeNode) {
+  let keys = Array.from(selectKeysRef.value)
+  if (!props.selectable) return
+  if (props.multiple) {
+    let index = keys.findIndex((key) => key === node.key)
+    if (index > -1) {
+      keys.splice(index)
+    } else {
+      keys.push(node.key)
+    }
+  } else {
+    if (keys.includes(node.key)) {
+      keys = []
+    } else {
+      keys = [node.key]
+    }
+  }
+
+  emit('update:selectedKeys', keys)
 }
 </script>

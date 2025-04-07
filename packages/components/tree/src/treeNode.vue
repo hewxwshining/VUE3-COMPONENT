@@ -1,6 +1,6 @@
 <template>
-  <div :class="bem.b()">
-    <div :class="bem.e('content')"
+  <div :class="[bem.b(),bem.is('selected',isSelected)]">
+    <div :class="[bem.e('content')]"
          :style="{ paddingLeft: `${node.level * 16}px` }">
       <span :class="[
           bem.e('expand-icon'),
@@ -14,7 +14,8 @@
           <loading v-else></loading>
         </f-icon>
       </span>
-      <span>{{ node?.label }}</span>
+      <span @click="handleSelected"
+            :class="bem.e('label')">{{ node?.label }}</span>
     </div>
   </div>
 </template>
@@ -25,7 +26,7 @@ import Loading from './icon/Loading.vue'
 import Switcher from './icon/Switcher.vue'
 import { treeNodeEmits, treeNodeProps } from './tree'
 const bem = createNamespace('tree-node')
-const { node, expanded, loadingKeysRef } = defineProps(treeNodeProps)
+const { node, expanded, loadingKeysRef, selectedKeys } = defineProps(treeNodeProps)
 const emit = defineEmits(treeNodeEmits)
 
 function handleExpand() {
@@ -35,4 +36,12 @@ function handleExpand() {
 const isLoading = computed(() => {
   return loadingKeysRef.has(node.key)
 })
+
+const isSelected = computed(() => {
+  return selectedKeys.includes(node.key)
+})
+
+function handleSelected() {
+  emit('select', node)
+}
 </script>
