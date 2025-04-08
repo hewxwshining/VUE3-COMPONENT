@@ -16,7 +16,15 @@
             :on-load='handleLoad'
             v-model:selectedKeys="value"
             selectable
-            multiple></f-tree>
+            multiple>
+      <template #default="scope">
+        33 {{ scope.node.key }}-{{ scope.node.label }} 44
+      </template>
+
+      <template #one="scope">
+        55 {{ scope.node.key }}-{{ scope.node.label }} 66
+      </template>
+    </f-tree>
     <!-- selectable 表示可以选择节点， multiple表示可以选择多个节点 -->
   </div>
 </template>
@@ -71,6 +79,33 @@ function nextLabel(currentLabel?: string | number): string {
 }
 
 const data = ref(createData())
+const data1 = ref<TreeOption[]>([
+  {
+    key: '0',
+    label: '0',
+    children: [
+      {
+        key: '0-0',
+        label: '0-0'
+      },
+      {
+        disabled: true,
+        key: '0-1',
+        label: '0-1',
+        children: [
+          {
+            key: '0-1-0',
+            label: '0-1-0'
+          },
+          {
+            key: '0-1-1',
+            label: '0-1-1'
+          }
+        ]
+      }
+    ]
+  }
+])
 
 console.log(data)
 

@@ -12,8 +12,8 @@
 </template>
 <script setup lang="ts">
 import { createNamespace } from '@fc/utils/create'
-import { computed, ref, watch } from 'vue'
-import { Key, treeEmits, TreeNode, TreeOption, treeProps } from './tree'
+import { computed, provide, ref, useSlots, watch } from 'vue'
+import { Key, treeEmits, treeInjectKey, TreeNode, TreeOption, treeProps } from './tree'
 import FTreeNode from './treeNode.vue'
 
 defineOptions({
@@ -54,6 +54,7 @@ function createTree(data: TreeOption[], parent: TreeNode | null = null): any {
         children: [], //默认为空
         rawNode: node,
         level: parent ? parent.level + 1 : 0,
+        disabled: !!node.disabled,
         //判断节点是否自带isLeaf如果自带了 以自带的为准，如果没有自带的则看一下有没有children
         //对 ｜｜ 的增强操作
         isLeaf: typeof node.isLeaf === 'boolean' ? node.isLeaf : children.length === 0
@@ -192,4 +193,8 @@ function handleSelect(node: TreeNode) {
 
   emit('update:selectedKeys', keys)
 }
+
+provide(treeInjectKey, {
+  slots: useSlots()
+})
 </script>

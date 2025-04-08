@@ -13,30 +13,19 @@ $B: null; // 初始化全局变量，避免未声明错误
 }
 
 // &__header => .f-button_header
+// &__header => .f-button__header
 @mixin e($element) {
-  $E: $element !global;
-  $selector: &;
   $currentSelector: '';
   @each $unit in $element {
     $currentSelector: #{$currentSelector + '.' + $B + $element-separator + $unit + ','};
   }
-  @if hitAllSpecialNestRule($selector) {
-    @at-root {
-      #{$selector} {
-        #{$currentSelector} {
-          @content;
-        }
-      }
-    }
-  } @else {
-    @at-root {
-      #{$currentSelector} {
-        @content;
-      }
+  $currentSelector: str-slice($currentSelector, 1, -1); // 去掉最后的逗号
+  @at-root {
+    #{$currentSelector} {
+      @content;
     }
   }
 }
-
 //&--primary => .z-button--primary
 @mixin m($modifier) {
   $selector: &;

@@ -1,5 +1,5 @@
 <template>
-  <div :class="[bem.b(),bem.is('selected',isSelected)]">
+  <div :class="[bem.b(),bem.is('selected',isSelected),bem.is('disabled', node.disabled)]">
     <div :class="[bem.e('content')]"
          :style="{ paddingLeft: `${node.level * 16}px` }">
       <span :class="[
@@ -15,7 +15,9 @@
         </f-icon>
       </span>
       <span @click="handleSelected"
-            :class="bem.e('label')">{{ node?.label }}</span>
+            :class="bem.e('label')">
+        <f-tree-node-content :node="node"></f-tree-node-content>
+      </span>
     </div>
   </div>
 </template>
@@ -25,6 +27,7 @@ import { computed } from 'vue'
 import Loading from './icon/Loading.vue'
 import Switcher from './icon/Switcher.vue'
 import { treeNodeEmits, treeNodeProps } from './tree'
+import FTreeNodeContent from './tree-node-content'
 const bem = createNamespace('tree-node')
 const { node, expanded, loadingKeysRef, selectedKeys } = defineProps(treeNodeProps)
 const emit = defineEmits(treeNodeEmits)
@@ -42,6 +45,7 @@ const isSelected = computed(() => {
 })
 
 function handleSelected() {
+  if (node.disabled) return
   emit('select', node)
 }
 </script>
