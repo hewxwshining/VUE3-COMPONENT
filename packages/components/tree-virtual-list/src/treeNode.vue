@@ -16,7 +16,8 @@
       </span>
       <span @click="handleSelected"
             :class="bem.e('label')">
-        <f-tree-node-content :node="node"></f-tree-node-content>
+        <f-tree-node-content :node="node">{{node.label}}</f-tree-node-content>
+
       </span>
     </div>
   </div>

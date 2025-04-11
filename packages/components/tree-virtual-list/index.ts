@@ -1,18 +1,18 @@
 //用来整合组件，最终实现导出组件
 
 import { withInstall } from '@fc/utils/with-install';
-import _Tree from './src/tree.vue';
+import _FTreeVirtualList from './src/tree.vue';
 
 
-const Tree = withInstall(_Tree)
+const FTreeVirtualList = withInstall(_FTreeVirtualList)
 
-export default Tree;
+export default FTreeVirtualList;
 
 export * from './src/tree.vue';
 
 declare module "vue" {
   export interface GlobalComponents {
-    FTreeVirtualList: typeof Tree
+    FTreeVirtualList: typeof FTreeVirtualList
   }
 }
 

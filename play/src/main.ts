@@ -3,12 +3,14 @@ import App from './App.vue'
 
 import FIcon from '@fc/components/icon'
 import FTree from '@fc/components/tree'
+import FTreeVirtualList from '@fc/components/tree-virtual-list'
 
 import "@fc/themes-chalk/src/index.scss"
 
 const plugins = [
   FIcon,
-  FTree
+  FTree,
+  FTreeVirtualList
 ]
 
 const app = createApp(App)

@@ -1,23 +1,27 @@
 <template>
   <div :class="bem.b()">
-    <f-tree-node v-for="node in flattenTree"
-                 :key="node.key"
-                 :node="node"
-                 :expanded="isExpanded(node)"
-                 :loadingKeysRef="loadingKeysRef"
-                 @toggle="toggleExpand"
-                 :selectedKeys='selectKeysRef'
-                 @select="handleSelect"></f-tree-node>
+    <f-virtual-list :items="flattenTree"
+                    :remain="8"
+                    :size='35'>
+      <!-- <template #default="{node}">
+        <f-tree-node :key="node.key"
+                     :node="node"
+                     :expanded="isExpanded(node)"
+                     :loadingKeysRef="loadingKeysRef"
+                     @toggle="toggleExpand"
+                     :selectedKeys='selectKeysRef'
+                     @select="handleSelect"></f-tree-node>
+      </template> -->
+    </f-virtual-list>
   </div>
 </template>
 <script setup lang="ts">
 import { createNamespace } from '@fc/utils/create'
 import { computed, provide, ref, useSlots, watch } from 'vue'
 import { Key, treeEmits, treeInjectKey, TreeNode, TreeOption, treeProps } from './tree'
-import FTreeNode from './treeNode.vue'
 
 defineOptions({
-  name: 'f-tree',
+  name: 'f-tree-virtual-list',
   inheritAttrs: false
 })
 

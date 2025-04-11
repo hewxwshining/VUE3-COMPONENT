@@ -9,11 +9,13 @@ export default defineComponent({
     console.log(treeContext)
     const { node } = props
     return () => {
-      if (node?.key != 1) {
-        return treeContext?.slots.default ? treeContext?.slots.default({ node }) : node?.label
-      } else {
-        return treeContext?.slots.one ? treeContext?.slots.one({ node }) : node?.label
-      }
+      return node?.label
+      // if (node?.key != 1) {
+      //   return treeContext?.slots.default ? treeContext?.slots.default({ node }) : node?.label
+      // } else {
+      //   return treeContext?.slots.one ? treeContext?.slots.one({ node }) : node?.label
+      // }
+
     }
   }
 })
