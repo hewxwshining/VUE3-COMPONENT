@@ -9,6 +9,7 @@ export interface TreeNode extends Required<TreeOption> {
   rawNode: TreeOption,
   children: TreeNode[],
   isLeaf: boolean,
+  parentKey: Key | undefined
 }
 
 
@@ -56,7 +57,16 @@ export const treeProps = {
   multiple: {
     type: Boolean,
     default: false
-  }
+  },
+  defaultCheckboxKeys: {
+    type: Array as PropType<Key[]>,
+    default: []
+  },
+  showCheckbox: {
+    type: Boolean,
+    default: false
+  },
+
 }
 
 export const treeNodeProps = {
@@ -76,7 +86,11 @@ export const treeNodeProps = {
   selectedKeys: {
     type: Array as PropType<Key[]>,
     default: () => []
-  }
+  },
+  showCheckbox: Boolean,
+  checked: Boolean,
+  disabled: Boolean,
+  indeterminate: Boolean
 } as const
 
 
@@ -85,7 +99,8 @@ export type TreeProps = Partial<ExtractPropTypes<typeof treeProps>>
 
 export const treeNodeEmits = {
   toggle: (node: TreeNode) => node,
-  select: (node: TreeNode) => node
+  select: (node: TreeNode) => node,
+  check: (node: TreeNode, value: boolean) => typeof value === 'boolean'
 }
 
 export const treeEmits = {
@@ -101,9 +116,9 @@ export interface TreeContext {
 
 //此变量作为提供出去的属性
 export const treeInjectKey: InjectionKey<TreeContext> = Symbol()
-export const treeNodeContentProps ={
-  node:{
-    type:Object as PropType<TreeNode>,
-    required:true
+export const treeNodeContentProps = {
+  node: {
+    type: Object as PropType<TreeNode>,
+    required: true
   }
 }

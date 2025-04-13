@@ -101,9 +101,9 @@ export interface TreeContext {
 
 //此变量作为提供出去的属性
 export const treeInjectKey: InjectionKey<TreeContext> = Symbol()
-export const treeNodeContentProps ={
-  node:{
-    type:Object as PropType<TreeNode>,
-    required:true
+export const treeNodeContentProps = {
+  node: {
+    type: Object as PropType<TreeNode>,
+    required: true
   }
 }

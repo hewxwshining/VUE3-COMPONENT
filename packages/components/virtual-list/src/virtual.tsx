@@ -18,7 +18,6 @@ export default defineComponent({
     }
   },
   setup(props, { slots }) {
-    console.log('props', slots)
     const bem = createNamespace('vl')
 
     const wrapperRef = ref<HTMLElement>()

@@ -7,12 +7,17 @@
                  :loadingKeysRef="loadingKeysRef"
                  @toggle="toggleExpand"
                  :selectedKeys='selectKeysRef'
-                 @select="handleSelect"></f-tree-node>
+                 @select="handleSelect"
+                 :show-checkbox="showCheckbox"
+                 :checked="isChecked(node)"
+                 :disabled="isDisabled(node)"
+                 :indeterminate="isIndeterminate(node)"
+                 @check=toggleCheck></f-tree-node>
   </div>
 </template>
 <script setup lang="ts">
 import { createNamespace } from '@fc/utils/create'
-import { computed, provide, ref, useSlots, watch } from 'vue'
+import { computed, onMounted, provide, ref, useSlots, watch } from 'vue'
 import { Key, treeEmits, treeInjectKey, TreeNode, TreeOption, treeProps } from './tree'
 import FTreeNode from './treeNode.vue'
 
@@ -57,7 +62,8 @@ function createTree(data: TreeOption[], parent: TreeNode | null = null): any {
         disabled: !!node.disabled,
         //判断节点是否自带isLeaf如果自带了 以自带的为准，如果没有自带的则看一下有没有children
         //对 ｜｜ 的增强操作
-        isLeaf: typeof node.isLeaf === 'boolean' ? node.isLeaf : children.length === 0
+        isLeaf: typeof node.isLeaf === 'boolean' ? node.isLeaf : children.length === 0,
+        parentKey: parent?.key
       }
       //有children再去递归，将其格式化成treeNode 类型
       if (children.length > 0) {
@@ -196,5 +202,84 @@ function handleSelect(node: TreeNode) {
 
 provide(treeInjectKey, {
   slots: useSlots()
+})
+
+const checkedKeysRefs = ref(new Set(props.defaultCheckedKeys))
+function isChecked(node: TreeNode) {
+  return checkedKeysRefs.value.has(node.key)
+}
+
+function isDisabled(node: TreeNode) {
+  return !!node.disabled
+}
+
+const indeterminateRefs = ref<Set<Key>>(new Set())
+function isIndeterminate(node: TreeNode) {
+  return indeterminateRefs.value.has(node.key)
+}
+
+function toggle(node: TreeNode, checked: boolean) {
+  if (!node) return
+  let checkedKeys = checkedKeysRefs.value
+  if (checked) {
+    // 选中的时候，去掉半选状态
+    indeterminateRefs.value.delete(node.key)
+  }
+  // 维护当前的Key列表
+  checkedKeys[checked ? 'add' : 'delete'](node.key)
+  let children = node.children
+  if (children) {
+    children.forEach((childNode) => {
+      if (!childNode.disabled) {
+        toggle(childNode, checked)
+      }
+    })
+  }
+}
+
+function findNode(key: Key) {
+  return flattenTree.value.find((node) => node.key === key)
+}
+function updateCheckedKeys(node: TreeNode) {
+  if (node.parentKey) {
+    const parentNode = findNode(node.parentKey)
+    if (parentNode) {
+      let allChecked = true
+      let hasChecked = false
+
+      let nodes = parentNode.children
+      for (const node of nodes) {
+        if (checkedKeysRefs.value.has(node.key)) {
+          hasChecked = true
+        } else if (indeterminateRefs.value.has(node.key)) {
+          allChecked = false
+          hasChecked = true
+        } else {
+          allChecked = false
+        }
+      }
+      if (allChecked) {
+        checkedKeysRefs.value.add(parentNode.key)
+        indeterminateRefs.value.delete(parentNode.key)
+      } else if (hasChecked) {
+        checkedKeysRefs.value.delete(parentNode.key)
+        indeterminateRefs.value.add(parentNode.key)
+      }
+
+      updateCheckedKeys(parentNode)
+    }
+  }
+}
+function toggleCheck(node: TreeNode, checked: boolean) {
+  toggle(node, checked)
+
+  updateCheckedKeys(node)
+}
+onMounted(() => {
+  console.log('checkedKeysRefs', checkedKeysRefs.value)
+  checkedKeysRefs.value.forEach((key) => {
+    console.log(key)
+    toggleCheck(findNode(key)!, true)
+  })
 })
 </script>

@@ -8,25 +8,33 @@
             :size="16">
       <AddCircle></AddCircle>
     </f-icon>
-    <f-tree-virtual-list :data="data"
-                         label-field="label"
-                         key-field="key"
-                         children-field="children"
-                         :default-expanded-keys="[]"
-                         :on-load='handleLoad'
-                         v-model:selectedKeys="value"
-                         selectable
-                         multiple>
-      <!-- <template #default="scope">
-        33 {{ scope.node.key }}-{{ scope.node.label }} 44
+    <f-tree :data="data"
+            label-field="label"
+            key-field="key"
+            children-field="children"
+            :default-expanded-keys="[]"
+            :on-load='handleLoad'
+            v-model:selectedKeys="value"
+            selectable
+            multiple
+            :show-checkbox="true"
+            :default-checked-keys="['40']">
+      <template #default="scope">
+        {{ scope.node.key }}-{{ scope.node.label }} 44
       </template>
 
       <template #one="scope">
-        55 {{ scope.node.key }}-{{ scope.node.label }} 66
-      </template> -->
-    </f-tree-virtual-list>
+        5 {{ scope.node.key }}-{{ scope.node.label }} 66
+      </template>
+    </f-tree>
     <!-- selectable 表示可以选择节点， multiple表示可以选择多个节点 -->
   </div>
+  {{ check }}
+  <F-checkbox v-model="check"
+              :disabled="false"
+              :indeterminate="true"
+              label='测试'
+              @change="handleChange"></F-checkbox>
 </template>
 <script setup lang="ts">
 import type { Key, TreeOption } from '@fc/components/tree/src/tree'
@@ -35,13 +43,14 @@ import { ref } from 'vue'
 
 function createData(level = 4, parentKey = ''): any {
   if (!level) return []
-  const arr = new Array(20 - level).fill(0)
+  const arr = new Array(6 - level).fill(0)
   return arr.map((_, idx: number) => {
     const key = parentKey + level + idx
     return {
       label: createLabel(level),
       key,
-      children: createData(level - 1, key)
+      children: createData(level - 1, key),
+      disabled: key === '4130' ? true : false
     }
   })
 }
@@ -124,6 +133,11 @@ const handleLoad = (node: TreeOption) => {
 }
 
 const value = ref<Key[]>(['40'])
+
+const check = ref(false)
+function handleChange(value: boolean) {
+  console.log(value)
+}
 </script>
 
 <style scoped></style>

@@ -14,6 +14,11 @@
           <loading v-else></loading>
         </f-icon>
       </span>
+      <f-checkbox v-if="showCheckbox"
+                  :disabled="disabled"
+                  :model-value="checked"
+                  :indeterminate="indeterminate"
+                  @change="handleCheckChange"></f-checkbox>
       <span @click="handleSelected"
             :class="bem.e('label')">
         <f-tree-node-content :node="node"></f-tree-node-content>
@@ -22,6 +27,7 @@
   </div>
 </template>
 <script lang="ts" setup>
+import FCheckbox from '@fc/components/checkbox'
 import { createNamespace } from '@fc/utils/create'
 import { computed } from 'vue'
 import Loading from './icon/Loading.vue'
@@ -47,5 +53,9 @@ const isSelected = computed(() => {
 function handleSelected() {
   if (node.disabled) return
   emit('select', node)
+}
+
+function handleCheckChange(value: boolean) {
+  emit('check', node, value)
 }
 </script>
