@@ -1,8 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
+import FButton from '@fc/components/button'
 import FCheckbox from '@fc/components/checkbox'
 import FIcon from '@fc/components/icon'
+import FInput from '@fc/components/input'
 import FTree from '@fc/components/tree'
 import FTreeVirtualList from '@fc/components/tree-virtual-list'
 
@@ -12,7 +14,9 @@ const plugins = [
   FIcon,
   FTree,
   FTreeVirtualList,
-  FCheckbox
+  FCheckbox,
+  FButton,
+  FInput
 ]
 
 const app = createApp(App)

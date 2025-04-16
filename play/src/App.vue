@@ -35,6 +35,32 @@
               :indeterminate="true"
               label='测试'
               @change="handleChange"></F-checkbox>
+
+  <f-button type="primary"
+            @click="handleClick"
+            iconPlacement="right">
+    <template #icon>
+      <f-icon :size="16">
+        <AddCircle></AddCircle>
+      </f-icon>
+    </template>
+    button
+  </f-button>
+  <br />
+  <f-input>
+    <template #prepend>珠峰</template>
+    <template #prefixIcon>
+      <f-icon :size="16">
+        <AddCircle></AddCircle>
+      </f-icon>
+    </template>
+    <template #subfixIcon>
+      <f-icon :size="16">
+        <AddCircle></AddCircle>
+      </f-icon>
+    </template>
+    <template #append>珠峰</template>
+</f-input>
 </template>
 <script setup lang="ts">
 import type { Key, TreeOption } from '@fc/components/tree/src/tree'
@@ -137,6 +163,10 @@ const value = ref<Key[]>(['40'])
 const check = ref(false)
 function handleChange(value: boolean) {
   console.log(value)
+}
+
+function handleClick(e: MouseEvent) {
+  console.log(e)
 }
 </script>
 

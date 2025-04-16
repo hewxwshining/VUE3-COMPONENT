@@ -28,10 +28,10 @@
 </template>
 <script lang="ts" setup>
 import FCheckbox from '@fc/components/checkbox'
+import Loading from '@fc/components/internal-icon/Loading.vue'
+import Switcher from '@fc/components/internal-icon/Switcher.vue'
 import { createNamespace } from '@fc/utils/create'
 import { computed } from 'vue'
-import Loading from './icon/Loading.vue'
-import Switcher from './icon/Switcher.vue'
 import { treeNodeEmits, treeNodeProps } from './tree'
 import FTreeNodeContent from './tree-node-content'
 const bem = createNamespace('tree-node')

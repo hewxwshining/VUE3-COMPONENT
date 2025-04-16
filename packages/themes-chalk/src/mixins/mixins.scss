@@ -14,17 +14,16 @@ $E: null; // 初始化全局变量，避免未声明错误
   }
 }
 
-
 // &__header => .f-button__header
 @mixin e($element) {
   $E: $element !global;
   $selector: &;
-  $currentSelector: "";
-//@each内 其实就是变量拼接，通过__符连接父级选择器和传入的子元素，而传入的值可以单个，也可以是数组；
+  $currentSelector: '';
+  //@each内 其实就是变量拼接，通过__符连接父级选择器和传入的子元素，而传入的值可以单个，也可以是数组；
   @each $unit in $element {
-    $currentSelector: #{$currentSelector + "." + $B + $element-separator + $unit + ","};
+    $currentSelector: #{$currentSelector + '.' + $B + $element-separator + $unit + ','};
   }
-// hitAllSpecialNestRule 为自己自定义函数
+  // hitAllSpecialNestRule 为自己自定义函数
   @if hitAllSpecialNestRule($selector) {
     @at-root {
       #{$selector} {
@@ -63,4 +62,10 @@ $E: null; // 初始化全局变量，避免未声明错误
       @content;
     }
   }
+}
+
+@mixin button-variant($color, $background-color, $border-color) {
+  color: $color;
+  background-color: $background-color;
+  border-color: $border-color;
 }
