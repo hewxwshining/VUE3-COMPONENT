@@ -54,7 +54,7 @@
         <AddCircle></AddCircle>
       </f-icon>
     </template>
-    <template #subfixIcon>
+    <template #suffixIcon>
       <f-icon :size="16">
         <AddCircle></AddCircle>
       </f-icon>

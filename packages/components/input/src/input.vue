@@ -1,22 +1,27 @@
 <template>
   <div :class="[bem.b()]">
-    <div v-if="slots.prepend"
-         :class="bem.be('group', 'prepend')">
-      <slot name="prepend"></slot>
-    </div>
-    <div :class="[bem.e('wrapper')]">
-      <span v-if="slots.prefixIcon">
-        <slot name="prefixIcon"></slot>
-      </span>
-      <input :type="type" v-bind="attrs">
-      <span v-if="slots.subfixIcon">
-        <slot name="subfixIcon"></slot>
-      </span>
-    </div>
-
-    <div v-if="slots.append"
-         :class="bem.be('group', 'append')">
-      <slot name="append"></slot>
+    <div :class="[bem.b('group')]">
+      <div v-if="slots.prepend"
+           :class="[bem.be('group','prepend')]">
+        <slot name="prepend"></slot>
+      </div>
+      <div :class="[bem.e('wrapper')]">
+        <span v-if="slots.prefixIcon"
+              :class="bem.e('prefix')">
+          <slot name="prefixIcon"></slot>
+        </span>
+        <input :type="type"
+               v-bind="attrs"
+               :class="bem.e('inner')">
+        <span v-if="slots.suffixIcon"
+              :class="bem.e('suffix')">
+          <slot name="suffixIcon"></slot>
+        </span>
+      </div>
+      <div v-if="slots.append"
+           :class="[bem.be('group', 'append')]">
+        <slot name="append"></slot>
+      </div>
     </div>
   </div>
 </template>
