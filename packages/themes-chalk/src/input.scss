@@ -23,6 +23,12 @@
     display: inline-flex;
     margin-left: 5px;
   }
+  @include e('show_pwd') {
+    cursor: pointer;
+  }
+  @include e('showClear') {
+    cursor: pointer;
+  }
   @include e(inner) {
     display: inline-flex;
     outline: none;

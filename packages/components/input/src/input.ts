@@ -13,7 +13,7 @@ export const inputProps = {
     type: [Number, String] as PropType<string | number>,
     default: ''
   },
-  Placeholder: {
+  placeholder: {
     type: String
   },
   clearable: {
