@@ -17,13 +17,18 @@
 </template>
 <script lang="ts" setup>
 import { createNamespace } from '@fc/utils/create'
-import { computed, provide, reactive, ref, toRefs } from 'vue'
-import { FormItemContext, formItemContextKey, formItemProps, FormItemRule, FormItemValidateState } from './form-item'
+import AsyncValidator, { Values } from 'async-validator'
+import { computed, inject, onMounted, provide, reactive, ref, toRefs } from 'vue'
+import { FormContext, FormContextKey } from './form'
+import { ArrayAble, FormItemContext, formItemContextKey, formItemProps, FormItemRule, FormItemValidateState } from './form-item'
 
 defineOptions({
   name: 'FFormItem',
   inheritAttrs: false
 })
+
+const formContext = inject<FormContext>(FormContextKey)
+console.log(formContext)
 
 const props = defineProps(formItemProps)
 
@@ -31,17 +36,27 @@ const bem = createNamespace('form-item')
 
 const validateState = ref<FormItemValidateState>('')
 
-const validateMessage = ref('校验失败')
+const validateMessage = ref('')
+
+const converArray = (rules: ArrayAble<FormItemRule> | undefined): FormItemRule[] => {
+  return rules ? (Array.isArray(rules) ? rules : [rules]) : []
+}
 
 const _rules = computed(() => {
-  const rules: FormItemRule[] = props.rules ? (Array.isArray(props.rules) ? props.rules : [props.rules]) : []
-  return rules
+  const myRules = converArray(props.rules)
+  const formRules = formContext?.rules
+  if (formRules && props.prop) {
+    const _temp = formRules[props.prop]
+    if (_temp) {
+      myRules.push(...converArray(_temp))
+    }
+  }
+  return myRules
 })
 
 const getRuleFiltered = (trigger: string) => {
-  console.log(_rules)
   const rules = _rules.value
-  return rules.filter((rule) => {
+  return rules.filter((rule: FormItemRule) => {
     if (!rule.trigger || !trigger) return true
     if (Array.isArray(rule.trigger)) {
       return rule.trigger.includes(trigger)
@@ -50,17 +65,43 @@ const getRuleFiltered = (trigger: string) => {
     }
   })
 }
+const onValidationSuccess = () => {
+  validateState.value = 'success'
+  validateMessage.value = ''
+}
+const onValidationFailed = (error: Values) => {
+  validateState.value = 'error'
+  const { errors } = error
+  validateMessage.value = errors ? errors[0].message : ''
+}
+
 const validate: FormItemContext['validate'] = async (trigger, callback?) => {
   const rules = getRuleFiltered(trigger)
-
-  console.log('trigger', trigger, rules)
-  console.log('callback', callback)
+  const modeName = props.prop!
+  const validator = new AsyncValidator({
+    [modeName]: rules
+  })
+  const model = formContext?.model || {}
+  return validator
+    .validate({
+      [modeName]: model[modeName]
+    })
+    .then(() => {
+      onValidationSuccess()
+    })
+    .catch((err: Values) => {
+      onValidationFailed(err)
+      return Promise.reject(err)
+    })
 }
 
 const context: FormItemContext = reactive({
   ...toRefs(props),
   validate
 })
-
 provide(formItemContextKey, context)
+
+onMounted(() => {
+  formContext?.addField(context)
+})
 </script>

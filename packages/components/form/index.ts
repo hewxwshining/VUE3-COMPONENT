@@ -3,17 +3,27 @@
 
 import { withInstall } from '@fc/utils/with-install';
 import _FormItem from './src/form-item.vue';
-
+import _Form from './src/form.vue';
 
 const FormItem = withInstall(_FormItem)
+const Form = withInstall(_Form)
 
-export default FormItem;
+export { Form, FormItem };
+
+export default {}
 
 export * from './src/form-item.vue';
+export * from './src/form.vue';
+
+export type { FormProps } from './src/form';
+export type { FormItemProps } from './src/form-item';
+
+export type FormInstance = InstanceType<typeof Form>
 
 declare module "vue" {
   export interface GlobalComponents {
-    FFormItem: typeof FormItem
+    FFormItem: typeof FormItem,
+    FForm: typeof Form
   }
 }
 

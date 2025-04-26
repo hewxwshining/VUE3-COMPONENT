@@ -14,6 +14,7 @@
                v-bind="attrs"
                :class="bem.e('inner')"
                ref='input'
+               autocomplete="off"
                @input='handleInput'
                @change='handleChange'
                @blur='handleBlur'
@@ -72,7 +73,7 @@ const setNativeInputValue = () => {
 watch(
   () => props.modelValue,
   () => {
-    formItemContext?.validate('change')
+    formItemContext?.validate('change').catch(() => {})
     setNativeInputValue()
   }
 )
@@ -103,8 +104,6 @@ const handleClear = () => {
 
 onMounted(() => {
   nextTick(() => {
-    console.log('init2')
-    console.log(input.value)
     setNativeInputValue()
   })
 })
@@ -116,15 +115,17 @@ const handleInput = (e: Event) => {
 }
 
 const handleChange = (e: Event) => {
+  formItemContext?.validate('change').catch(() => {})
   emit('change', (e.target as HTMLInputElement).value)
 }
 
 const handleBlur = (e: Event) => {
-  formItemContext?.validate('blur')
-  emit('blur', e)
+  formItemContext?.validate('blur').catch(() => {})
+  emit('blur', e as FocusEvent)
 }
 
 const handleFocus = (e: Event) => {
-  emit('focus', e)
+  formItemContext?.validate('focus').catch(() => {})
+  emit('focus', e as FocusEvent)
 }
 </script>
