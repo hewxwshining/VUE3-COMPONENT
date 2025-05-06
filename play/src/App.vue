@@ -1,9 +1,9 @@
 <template>
   <div class="wrapper">
-    <form-div></form-div>
+    <UploadDiv></UploadDiv>
   </div>
 </template>
 <script setup lang="ts">
-import FormDiv from './component/form/index.vue';
+import UploadDiv from './component/upload/index.vue';
 </script>
 <style scoped></style>

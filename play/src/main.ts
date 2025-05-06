@@ -8,6 +8,7 @@ import FIcon from '@fc/components/icon'
 import FInput from '@fc/components/input'
 import FTree from '@fc/components/tree'
 import FTreeVirtualList from '@fc/components/tree-virtual-list'
+import FUpload from '@fc/components/upload'
 
 import "@fc/themes-chalk/src/index.scss"
 
@@ -19,7 +20,8 @@ const plugins = [
   FButton,
   FInput,
   FFormItem,
-  FForm
+  FForm,
+  FUpload
 ]
 
 const app = createApp(App)
